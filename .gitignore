@@ -1,0 +1,4 @@
+node_modules/
+.env
+frontend-original.html
+.env.example

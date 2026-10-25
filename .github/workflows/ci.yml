@@ -1,0 +1,33 @@
+name: OpsNest 
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check required files exist
+        run: |
+          test -s public/index.html
+          test -s server.js
+          test -s schema.sql
+          test -s package.json
+
+      - name: Check the server code has no syntax errors
+        run: node --check server.js
+
+      - name: Make sure the demo version was not uploaded by mistake
+        run: "! grep -q 'LIVE DEMO' public/index.html"
